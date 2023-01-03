@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package service;
+option go_package = "https://github.com/suvihanninen/examSubmission.git;service";
+
+
+service DistService {
+    rpc Add (AddRequest) returns (AddResponse) {}
+    rpc Read(ReadRequest)returns (ReadResponse){}
+}
+
+message AddRequest {
+   string word = 1;
+   string definition = 2;
+}
+
+message AddResponse {
+    bool ack = 1; //success, failed
+   
+}
+
+message ReadRequest {
+    string word = 1;
+    
+}
+
+message ReadResponse {
+    string definition = 1; 
+   
+}
