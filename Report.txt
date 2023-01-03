@@ -1,3 +1,15 @@
+The system model is using passive replication to get accessed to shared resources. This means that when add 
+request is initiated from the client, it will be sent to the Primary Reolica which will be distributing it to the
+Backup Replica. In Read request the value is read from the Primary Replica.
+
+The system can tolerate one crash failure, either in Primary Replica or in Backup Replica. The server can
+be "chrached"  by pressing ctrl + c to interrupt it, (1) if  a Primary or Backup Replica is 
+interrupted the client(s) will continue operating as before, and (2) if  a client is interrupted the system 
+will continue operating as before if there are remaining clients.
+
+A crached client or server is not assumed to recover. Due to this the state will not be transfferred if 
+the node would get back to alive. The network is assumed to be asynchronous meaning that no upperbound latency is assumed. 
+
 a) how does your system satisfy points 1-7
     (1) it provides two operations called 'add' and 'read'
     I have made rpc calls to Add a word with definition and to Read a definition when a word 
@@ -34,3 +46,39 @@ a) how does your system satisfy points 1-7
     ´return &distSystem.ReadResponse{Definition: definition}, nil´
     The definition is the value associated to the given word and it is attached to the ReadResponse message 
     to return it to the client. 
+
+b) argue why your system satisfies the requirement in point 8
+
+If add request is initiated from client 1 and subsequently a read request is initiated from client 1 the system 
+will execute the requests as such that first the add request will be excecuted and distributed to the 
+backup replica and after the add has returned the read request will be executed. Requests which are executed 
+from one process are ordered in total order where messages are delivered in the same order where they 
+were excecuted and the we can compare the events and tell which one happened before.
+
+If add request is initiated from client 1 and subsequently a read request is initiated from client 2 these events will
+happen concurrently. Since one requirement is that subsequent read(w) after add(w,def) needs to return def, 
+I implemented locks both in read and add. This will lock the system such that each operation will have to wait 
+for the other operation to return before the subsequent request can be excecuted. I do understand that this will make 
+the system perform slower, since no concurrent reads are possible. However, by locking the system it will stay
+consistent between add events from differnet prcesses (clients). 
+
+If the lock could not have been implemented to the read request, the system would had had causal ordering. This 
+defines a partial order which means that from concurrent events, it is impossible to say which happened before.
+If two events happened on the same process such order would be 'happened before order' which means the order of the 
+events could be seen. In causal ordering it is fine to read the old value from a concurrent add request as long
+as a the add request has not returned. After a returned add request the Primary Replica needs to be consistent with 
+read request
+
+c) argue why the system is tolerant to one crash-failure
+The Backup Replica is important for the system in case one node crashes. If Primary Replica crashes 
+the Backup Replica will become the primary and if Backup crashes the system can still continue working. 
+The Primary replica is sending heart beats for the Backup Replica to indicate if it is still alive. If the 
+Backup replica doesn't get a heartbeat in 2 sec, it will become the primary replica as it assumes that the 
+PrimaryReplica is crached. 
+Having a such system where the data is replicated on multiple replicas will make the system more avaliable.  
+
+d) argue whether your system satisfies linearisability and/or causal consistency.
+As the system satisfies linarisability, it also satisfies causal consistency. It satisfies linearizability, 
+since the whole system is locked by locking each rpc method to respond to a clients request. This way (as explained
+already in question b)) each request will be processed in the order in which they were sent. 
+
