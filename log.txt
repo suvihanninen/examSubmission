@@ -1,0 +1,42 @@
+2023/01/03 14:31:33 Server 5001: Trying to dial: 5002
+2023/01/03 14:31:34 Server 5002: Trying to dial: 5001
+2023/01/03 14:31:34 We have assigned primary replica on port: %!(EXTRA int32=5001)
+2023/01/03 14:31:52 Client 1: sent an add request 
+2023/01/03 14:31:54 Client 1: Add failed: %!(EXTRA *status.Error=rpc error: code = Unavailable desc = error reading from server: EOF)
+2023/01/03 14:31:54 Client 1: PrimaryReplica has died
+2023/01/03 14:31:54 Client: PrimaryReplica on port :5001 is not listening anymore. It has died
+2023/01/03 14:31:54 Client 1: Redialing to new port: :5002
+2023/01/03 14:31:54 Client 1: Client has connected to new PrimaryReplica on port :5002
+2023/01/03 14:31:54 Client 1: sent an add request 
+2023/01/03 14:31:55 Backup Replica 5002: Something went wrong while sending heartbeat
+2023/01/03 14:31:55 Backup Replica 5002: Error:%!(EXTRA *status.Error=rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing dial tcp :5001: connect: connection refused")
+2023/01/03 14:31:55 Backup Replica 5002: Exception, We did not get heartbeat back from Primary Replica with port 5001. It has died, 
+2023/01/03 14:31:55 Leader election started by assigning the remaining replica as Primary Replica
+2023/01/03 14:31:57 Client 2: sent a Read request
+2023/01/03 14:31:57 Client 2: Read request failed: %!(EXTRA *status.Error=rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing dial tcp :5001: connect: connection refused")
+2023/01/03 14:31:57 Client: PrimaryReplica on port :5001 is not listening anymore. It has died
+2023/01/03 14:31:57 Client 2: Redialing to new port: :5002
+2023/01/03 14:31:57 Client 2: Client has connected to new PrimaryReplica on port :5002
+2023/01/03 14:31:57 Backup Replica 5002: Added new definition
+2023/01/03 14:31:57 Primary Replica 5002: Reads definition 'pet' to word 'dog'
+2023/01/03 14:31:57 Client 2: Result from Read request: pet
+2023/01/03 14:31:57 Client 1: Add response: true
+2023/01/03 14:32:05 New Primary Replica has port 5002 
+2023/01/03 14:56:23 Server 5002: Trying to dial: 5001
+2023/01/03 14:56:25 Server 5001: Trying to dial: 5002
+2023/01/03 14:56:26 We have assigned primary replica on port: %!(EXTRA int32=5001)
+2023/01/03 14:56:35 Client 1: sent a Read request
+2023/01/03 14:56:35 Primary Replica 5001: Reads definition '' to word 'cat'
+2023/01/03 14:56:35 Client 1: Result from Read request: 
+2023/01/03 14:56:54 Server 5002: Trying to dial: 5001
+2023/01/03 14:56:55 Server 5001: Trying to dial: 5002
+2023/01/03 14:56:56 We have assigned primary replica on port: %!(EXTRA int32=5001)
+2023/01/03 14:57:04 Client 1: sent a Read request
+2023/01/03 14:57:04 Client 1: Result from Read request: Definition to requested word has not been added yet.
+2023/01/03 14:57:15 Client 1: sent an add request 
+2023/01/03 14:57:18 Primary Replica 5001: Added definition to dictionary
+2023/01/03 14:57:21 Backup Replica 5002: Added new definition
+2023/01/03 14:57:21 Client 1: Add response: true
+2023/01/03 14:57:21 Client 1: sent a Read request
+2023/01/03 14:57:21 Primary Replica 5001: Reads definition 'animal' to word 'cat'
+2023/01/03 14:57:21 Client 1: Result from Read request: animal

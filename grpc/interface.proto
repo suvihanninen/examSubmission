@@ -7,6 +7,16 @@ option go_package = "https://github.com/suvihanninen/examSubmission.git;service"
 service DistService {
     rpc Add (AddRequest) returns (AddResponse) {}
     rpc Read(ReadRequest)returns (ReadResponse){}
+    rpc GetHeartBeat(BeatRequest)returns (BeatAck){}
+}
+
+message BeatRequest {
+    string message = 1;
+}
+
+message BeatAck {
+    string port = 1;
+
 }
 
 message AddRequest {
@@ -15,7 +25,7 @@ message AddRequest {
 }
 
 message AddResponse {
-    bool ack = 1; //success, failed
+    bool ack = 1; 
    
 }
 

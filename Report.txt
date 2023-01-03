@@ -1,0 +1,36 @@
+a) how does your system satisfy points 1-7
+    (1) it provides two operations called 'add' and 'read'
+    I have made rpc calls to Add a word with definition and to Read a definition when a word 
+    attached to the definition is passed. The rpc calls are defined in the interface.proto file.
+
+    (2) operation 'add' has two parameters, a word and its definition, and returns a boolean value. Both input parameters are strings.
+    This has been implemented by adding parameters to the request and response messages in the Add rpc calls.
+    The Request and Response messages and the parameters with the required data types are defined in the proto file.
+
+    (3) operation 'add' updates the dictionary at the requested entry with the new definition
+    The Replica server implements a dictionary where the words (keys) and definitions (values) are added.
+    If a word already exsists in the dictionary, the definition attached to it will be overwritten with the new 
+    definition. If the word doesen't have entry yet in in the dictionary it will be added as a new entry to the
+    dictionary. The line below shows this operation in code:
+    ´RM.dictionary[word] = definition´
+
+    (4) operation 'add' returns a confirmation of whether it succeeded or not
+    The add will return a true (add succeeded) or a false (add didn't succeed) in the response message to 
+    the add request. 
+
+    (5) operation 'read' has one parameter (a word) and it returns a string
+    The read request message has a parameter "word" which will be search from the map. If the word exsists
+    in  the map, the definition attached to it will be returned. If the word doesn't exsist in the map the 
+    the read operation will return "Definition to requested word has not been added yet."
+
+    (6) operation 'read' accesses the entry specified by the given word
+    The line below shows how the entry is accessed by the given word:
+    `definition := RM.dictionary[ReadRequest.GetWord()]`
+    It gets the word from the ReadRequest message and searches that word from the dictionary. If a word is found,
+    it will return the definition attached to the word.
+
+    (7) operation 'read' returns the value associated to the given word
+    The line of code below shows how the definition (value) associated to the given word is returned:
+    ´return &distSystem.ReadResponse{Definition: definition}, nil´
+    The definition is the value associated to the given word and it is attached to the ReadResponse message 
+    to return it to the client. 
